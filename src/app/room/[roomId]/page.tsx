@@ -22,6 +22,7 @@ const Page = () => {
   const router = useRouter()
   
   const { username } = useUsername();
+
   const [input, setInput] = useState('');
    
   const inputRef = useRef<HTMLInputElement>(null);
@@ -111,21 +112,23 @@ const Page = () => {
   
   return (
     <main className="flex flex-col h-screen max-h-screen overflow-hidden">
-      <header className="border-b border-zinc-800 p-4 flex items-center justify-between bg-zinc-900/30">
+      <header className="border-b border-zinc-800 p-4 flex items-center justify-between bg-zinc-900/30 relative">
         <div className="flex items-center gap-4">
-          <div className="flex flex-col">
+          <div className="flex flex-col gap-2 md:gap-0">
             <span className="text-xs text-zinc-500 uppercase">
               Room Id
             </span>
-            <div className="flex items-center gap-2">
-              <span className="font-bold text-green-500">{ roomId }</span>
-              <button className="text-[10px] bg-zinc-800 hover:bg-zinc-700 px-2 py-0.5 rounded text-zinc-400 hover:text-zinc-200 transition-colors" onClick={copyLink}>{copyStatus}</button>
+            <div className="flex flex-col md:flex-row items-center gap-2">
+              <span className="font-bold text-sm text-green-500">{ roomId }</span>
+              <button className="text-[10px] bg-zinc-800 hover:bg-zinc-700 px-2 py-0.5 rounded text-zinc-400 hover:text-zinc-200 transition-colors self-start md:self-center" onClick={copyLink}>{copyStatus}</button>
             </div>
           </div>
+
           <div className="h-8 w-px bg-zinc-800" />
-          <div className="flex flex-col">
+
+          <div className="flex flex-col gap-2 md:gap-0 justify-center">
             <span className="text-xs text-zinc-500 uppercase">
-              Akan hancur Dalam:
+              hancur Dalam:
             </span>
             <span className={`text-sm font-bold flex items-center gap-2 ${timeRemaining !== null && timeRemaining < 60 ? 'text-red-500' : 'text-amber-500'}`}>
               { timeRemaining !== null ? formatTimeRemaining(timeRemaining) : "--:--" }
@@ -133,10 +136,22 @@ const Page = () => {
           </div>
         </div>
         
-        <button onClick={() => destroyRoom()} className="text-xs bg-zinc-800 hover:bg-red-600 px-3 py-1.5 rounded text-zinc-400 hover:text-white font-bold transition-all group flex items-center gap-2 disabled:opacity-50">
+        <button onClick={() => destroyRoom()} 
+          className="hidden text-xs bg-zinc-800 hover:bg-red-600 px-3 py-1.5 rounded text-zinc-400 hover:text-white font-bold transition-all group md:flex items-center gap-2 disabled:opacity-50">
           <Bomb className="w-4 h-4 group-hover:animate-pulse" />
           HANCURKAN SEKARANG
         </button>
+
+        <button
+        title="Hancurkan Sekarang"
+        onClick={() => destroyRoom()} 
+        className="md:hidden -bottom-12 right-2 absolute bg-zinc-800 hover:bg-red-600 px-5 py-3 rounded group">
+          <Bomb className="w-4 h-4 group-hover:animate-pulse" />
+        </button>
+
+
+
+        
       </header>
       
       {/* Messages */}
@@ -187,7 +202,7 @@ const Page = () => {
                 setInput('');
               }
             }}
-            placeholder="Masukkan pesan"
+            placeholder="Masukkan pesan..."
             onChange={(e) => {setInput(e.target.value)}}
             className="w-full bg-black border-zinc-800 focus:border-zinc-700 focus:outline-none transition-colors text-zinc-500 py-3 pl-8 pr-4 text-sm"/>
           </div>
@@ -198,7 +213,8 @@ const Page = () => {
               setInput('');
             }}
             disabled={!input.trim() || isPending}
-            className="bg-zinc-800 text-zinc-400 px-6 text-sm fonr-bold hover:text-zinc-200 transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">KIRIM</button>
+            className="bg-zinc-800 text-zinc-400 px-6 text-sm fonr-bold hover:text-zinc-200 transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">
+              {isPending ? "Mengirim..." : "KIRIM"}</button>
         </div>
       </div>
     </main>

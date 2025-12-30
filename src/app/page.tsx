@@ -24,7 +24,7 @@ function Lobby() {
   const wasDestroyed = searchParams.get("destroyed") === "true";
   const error = searchParams.get("error");
 
-  const { mutate: createRoom } = useMutation({
+  const { mutate: createRoom, isPending: isLoading } = useMutation({
     mutationFn: async () => {
       const res = await client.room.create.post();
 
@@ -73,7 +73,7 @@ function Lobby() {
           </h1>
           <p className="text-zinc-500 text-sm">
             {" "}
-            A private, self-destructing chat room{" "}
+            Ruang chat privasi yang akan hancurkan otomatis setelah waktu habis
           </p>
         </div>
         <div className="border-zinc-800 bg-zinc-900/50 p-6 backdrop-blur-md">
@@ -91,8 +91,9 @@ function Lobby() {
             <button
               className="w-full bg-zinc-200 text-black p-3 text-sm font-bold hover:text-black hover:bg-zinc-50 transition-colors disabled:opacity-50 mt-2 cursor-pointer"
               onClick={() => createRoom()}
+              disabled={isLoading}
             >
-              Buat Room
+              {isLoading ? <p><span className="animate-spin"></span>Loading...</p> : "Buat Room"}
             </button>
           </div>
         </div>
