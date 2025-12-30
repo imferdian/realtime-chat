@@ -13,7 +13,7 @@ export const proxy = async (req: NextRequest) => {
   
   const meta = await redis.hgetall<{connected: string[], createdAt: number}>(`meta:${roomId}`)
   
-  if(!meta) return NextResponse.redirect(new URL('/?error=room_not_found', req.url))
+  if(!meta) return NextResponse.redirect(new URL('/?error=room-not-found', req.url))
   
   const existingToken = req.cookies.get('x-auth-token')?.value;
   
@@ -22,7 +22,7 @@ export const proxy = async (req: NextRequest) => {
   }
   
   if(meta.connected.length >= 2){
-    return NextResponse.redirect(new URL('/?error=room_full', req.url))
+    return NextResponse.redirect(new URL('/?error=room-full', req.url))
   }
   
   const response = NextResponse.next();
